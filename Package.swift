@@ -7,7 +7,7 @@ let package = Package(
     name: "SwiftServerHelloWorld",
     dependencies: [
     .package(url: "https://github.com/IBM-Swift/Kitura.git", from:"1.7.6"),
-    .package(url: "https://github.com/Alamofire/Alamofire.git", from: "4.5.0"),
+//    .package(url: "https://github.com/Alamofire/Alamofire.git", from: "4.5.0"),
     .package(url: "https://github.com/IBM-Swift/HeliumLogger.git", from: "1.7.0")
     ],
     targets: [
@@ -15,7 +15,9 @@ let package = Package(
             // Targets can depend on other targets in this package, and on products in packages which this package depends on.
             .target(
                 name: "SwiftServerHelloWorld",
-                dependencies: ["Kitura", "Alamofire", "HeliumLogger"]),
+//                dependencies: ["Kitura", "HeliumLogger","Alamofire"]),
+            dependencies: ["Kitura", "HeliumLogger"]),
+
     ]
     
 )

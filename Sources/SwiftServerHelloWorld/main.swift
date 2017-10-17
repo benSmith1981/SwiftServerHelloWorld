@@ -1,5 +1,7 @@
 import Kitura
 import HeliumLogger
+import Foundation
+import Alamofire
 
 // Create a new router
 let router = Router()
