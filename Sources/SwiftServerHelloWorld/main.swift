@@ -17,28 +17,16 @@ if let requestedPort = ProcessInfo.processInfo.environment["PORT"] {
 } else {
     port = defaultPort
 }
+
 let mongoDB: Database?
-do {
-    mongoDB = try Database("mongodb://bensmith:1a2b3c4d@ds121945.mlab.com:21945/heroku_xvlwvnkd")
-    // Add your application here
-    print("Connected to MongoDB")
-    router.get("/getAllItems/") {
-        request, response, next in
-        if let mongoDB = mongoDB {
-            let items = mongoDB["ShoppingItems"]
-            for document in try items.find() {
-                // do something with document
-                print(document)
-                response.send("\(document)")
-
-            }
-
-        }
-    }
-
-} catch {
-    print("Cannot connect to MongoDB")
-}
+mongoDB = try Database("mongodb://bensmith:1a2b3c4d@ds121945.mlab.com:21945/heroku_xvlwvnkd")
+// Add your application here
+print("Connected to MongoDB")
+//do {
+//
+//} catch {
+//    print("Cannot connect to MongoDB")
+//}
 
 // Handle HTTP GET requests to /
 router.get("/hello/:name") {
@@ -49,7 +37,17 @@ router.get("/hello/:name") {
 //    response.send(json: {"name":{"items":{"Price":0,"name":"Party"}}})
 }
 
-
+router.get("/getAllItems/") {
+    request, response, next in
+    if let mongoDB = mongoDB {
+        let items = mongoDB["ShoppingItems"]
+        for document in try items.find() {
+            // do something with document
+            print(document)
+            response.send("\(document)")
+        }
+    }
+}
 // Add an HTTP server and connect it to the router
 Kitura.addHTTPServer(onPort: port, with: router)
 
