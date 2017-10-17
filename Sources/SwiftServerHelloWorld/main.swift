@@ -17,11 +17,24 @@ if let requestedPort = ProcessInfo.processInfo.environment["PORT"] {
 } else {
     port = defaultPort
 }
-
+let mongoDB: Database?
 do {
-    let mongoDB = try Database("mongodb://bensmith:1a2b3c4d@ds121945.mlab.com:21945/heroku_xvlwvnkd")
+    mongoDB = try Database("mongodb://bensmith:1a2b3c4d@ds121945.mlab.com:21945/heroku_xvlwvnkd")
     // Add your application here
     print("Connected to MongoDB")
+    router.get("/getAllItems/") {
+        request, response, next in
+        if let mongoDB = mongoDB {
+            let items = mongoDB["ShoppingItems"]
+            for document in try items.find() {
+                // do something with document
+                print(document)
+                response.send("\(document)")
+
+            }
+
+        }
+    }
 
 } catch {
     print("Cannot connect to MongoDB")
@@ -31,11 +44,11 @@ do {
 router.get("/hello/:name") {
     request, response, next in
     let name = request.parameters["name"] ?? "World!"
-    response.send(name)
-//    let items = mongoDB["ShoppingItems"]
-//    response.send(items.find())
-    //    response.send(json: {"name":{"items":{"Price":0,"name":"Party"}}})
+    response.send("Hello \(name)")
+
+//    response.send(json: {"name":{"items":{"Price":0,"name":"Party"}}})
 }
+
 
 // Add an HTTP server and connect it to the router
 Kitura.addHTTPServer(onPort: port, with: router)
