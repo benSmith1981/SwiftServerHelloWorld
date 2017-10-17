@@ -10,7 +10,7 @@ let router = Router()
 HeliumLogger.use()
 
 // Handle HTTP GET requests to /
-router.get("/") {
+router.get("/helloworld") {
     request, response, next in
     response.send("Hello, World!!")
     next()
